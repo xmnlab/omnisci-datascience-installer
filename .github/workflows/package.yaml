@@ -44,7 +44,7 @@ jobs:
       shell: bash -l {0}
       run: |
         # constructor --conda-exe conda.exe constructor/
-        touch omnisci-0.0.2-MacOSX-x86_64.pkg
+        touch omnisci-0.0.2-MacOSX-x86_64.txt
 
     - name: Create Release
       id: create_release
@@ -60,7 +60,7 @@ jobs:
     - name: get package name 
       id: package_name
       run: |
-        PACK_NAME=$(ls omnisci-*-MacOSX-x86_64.pkg)
+        PACK_NAME=$(ls omnisci-*-MacOSX-x86_64.txt)
         echo "::set-output name=filename::$PACK_NAME"
     - name: Upload Release Asset
       id: upload-release-asset 
