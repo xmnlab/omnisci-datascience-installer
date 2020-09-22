@@ -3,8 +3,12 @@ name: packaging
 on:
   push:
     branches: [ master ]
+    tags:
+    - 'v*'
   pull_request:
     branches: [ master ]
+    tags:
+    - 'v*'
 
 jobs:
   macos:
@@ -44,35 +48,49 @@ jobs:
       shell: bash -l {0}
       run: |
         # constructor --conda-exe conda.exe constructor/
-        touch omnisci-0.0.2-MacOSX-x86_64.pkg
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+        touch omnisci-0.0.2-MacOSX-x86_64.txt
 
     - name: get package name 
       id: package_name
       run: |
-        PACK_NAME=$(ls omnisci-*-MacOSX-x86_64.pkg)
+        PACK_NAME=$(ls omnisci-*-MacOSX-x86_64.txt)
         echo "::set-output name=filename::$PACK_NAME"
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
+
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ github.ref }}
+    #     release_name: Release ${{ github.ref }}
+    #     draft: false
+    #     prerelease: false
+
+    # - name: Upload Release Asset
+    #   id: upload-release-asset 
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     # This pulls from the CREATE RELEASE step above, referencing it's ID to
+    #     # get its outputs object, which include a `upload_url`. See this blog 
+    #     # post for more info: 
+    #     # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: ./${{ steps.package_name.outputs.filename }}
+    #     asset_name: ${{ steps.package_name.outputs.filename }}
+    #     asset_content_type: text/plain
+
+
+    - name: Create Release
+      id: create_release
+      uses: ncipollo/release-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        # This pulls from the CREATE RELEASE step above, referencing it's ID to
-        # get its outputs object, which include a `upload_url`. See this blog 
-        # post for more info: 
-        # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ steps.package_name.outputs.filename }}
-        asset_name: ${{ steps.package_name.outputs.filename }}
-        asset_content_type: application/octet-stream
+        tag: ${{ github.event.release.tag_name }}
+        name: Release ${{ github.event.release.tag_name }}
+        artifacts: ${{ steps.package_name.outputs.filename }}
+        body: Release ${{ github.event.release.tag_name }}
+        token: ${{ secrets.GITHUB_TOKEN }}
