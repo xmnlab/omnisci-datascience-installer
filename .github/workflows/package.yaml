@@ -75,4 +75,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./${{ steps.package_name.outputs.filename }}
         asset_name: ${{ steps.package_name.outputs.filename }}
-        asset_content_type: application/octet-stream
+        asset_content_type: text/plain
