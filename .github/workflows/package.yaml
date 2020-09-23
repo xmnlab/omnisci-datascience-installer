@@ -48,7 +48,7 @@ jobs:
       shell: bash -l {0}
       run: |
         # constructor --conda-exe conda.exe constructor/
-        touch omnisci-0.0.2-MacOSX-x86_64.txt
+        echo "1234567890" > omnisci-0.0.2-MacOSX-x86_64.txt
 
     - name: get package name 
       id: package_name
@@ -89,8 +89,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        allowUpdates: true
+        replacesArtifacts: true
         tag: ${{ github.event.release.tag_name }}
         name: Release ${{ github.event.release.tag_name }}
+        commit: master
         artifacts: ${{ steps.package_name.outputs.filename }}
+        artifactContentType: application/octet-stream
         body: Release ${{ github.event.release.tag_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
