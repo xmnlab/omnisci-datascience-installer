@@ -11,8 +11,8 @@ $VERSION_BUMP_PATTERNS = [
     ('constructor/sh/construct.yaml', r'version\s*:.*', "version: $VERSION"),
 ]
 
-$PUSH_TAG_REMOTE = 'git@github.com:Quansight/omnisci-datascience-installer.git'  # Repo to push tags to
+$PUSH_TAG_REMOTE = 'git@github.com:xmnlab/omnisci-datascience-installer.git'  # Repo to push tags to
 # $TAG_TEMPLATE = 'v$VERSION'
 
-$GITHUB_ORG = 'Quansight'  # Github org for Github releases and conda-forge
+$GITHUB_ORG = 'xmnlab'  # Github org for Github releases and conda-forge
 $GITHUB_REPO = 'omnisci-datascience-installer'  # Github repo for Github releases  and conda-forge
